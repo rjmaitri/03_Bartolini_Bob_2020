@@ -2,19 +2,48 @@
 title: "GGplot"
 author: "Robert Bartolini"
 date: "9/28/2020"
-output: html_document
+output: 
+  html_document: 
+    theme: spacelab
 ---
 
+<div align="center">
+ <marquee behavior="alternate" bgcolor="#bb3434" direction="left" height:="" 
+ loop="7" scrollamount="1" scrolldelay="2" width="100%">
+ <span style="font-size: 20px;color:#FFFFFF">
+ Sims and Viz!</span></marquee>
+</div>
+
+
+
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+#scrolling code output
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE
+)
+options(width = 60)
+local({
+  hook_output <- knitr::knit_hooks$get('output')
+  knitr::knit_hooks$set(output = function(x, options) {
+    if (!is.null(options$max.height)) options$attr.output <- c(
+      options$attr.output,
+      sprintf('style="max-height: %s;"', options$max.height)
+    )
+    hook_output(x, options)
+  })
+})
 ```
+
+
 
 
 Sims and Viz
 Biol 607
 9/26/2020
 
-#### 1. Sample Properties
+## 1. Sample Properties
 ##Consider the following vasopressin levels in voles.
 
 ```{r}
@@ -23,11 +52,48 @@ vole_vaso <- c(98,96,94,88,86,82,77,74,70,60,
 
 ```
 
-##  1a. Say “Vole vasopressin” 10 times as fast as you can. How many times did you trip up?
+####  1a. Say “Vole vasopressin” 10 times as fast as you can. How many times did you trip up?
+
+<span style="color: green;"> I was tongue twisted on the 4th utterance.</span>
 
 ##  1b. What is the mean, median, sd, and interquartile range of the sample?
 
+<span style="color: green;"> The mean of this sample of vole vasopressin is `r mean(vole_vaso)`<br>
+The median is `r median(vole_vaso)`<br>
+The SD is `r sd(vole_vaso)`<br>
+The IQR is IQR `r IQR(vole_vaso)`</span>
+
 ##  1c. What is the standard error of the mean (do this with a formula!)?
+<span style="color: green;">The formula for standard error is &sigma;/&#8730;N<br>
+I'll begin this problem by calculating the standard deviation. </span>
+
+<span style="color: green;"> The standard deviation is the square root of the average value of (xi - mu)<sup>2</sup></span>
+
+```{r}
+
+#formula for std deviation 
+
+SD_vole_vaso <- sqrt(sum((vole_vaso-mean(vole_vaso))^2/(length(vole_vaso)-1))) 
+
+```
+
+<span style="color: green;"> The standard deviation of our samples is *29*<br>
+<br>
+Next, Ill calculate &#8730;N</span>
+
+```{r}
+#square root of the sample size 
+SQRT_vole_vasoAVG <- sqrt(length(vole_vaso))
+
+```
+
+<span style="color: green;">&#8730;N = *7.6*</sup>
+
+<span style="color: green;"> The std error of the mean of the vole vassopressin population is *`r SD_vole_vaso/SQRT_vole_vasoAVG`*</span>
+
+```
+
+<span style="color: green;"> The standard deviation is the square root of the average value of (xi - mu)<sup>2</sup>
 
 ##  1d. What does the standard error of the mean tell you about our estimate of the mean values of the population of vole vassopressin?
 
