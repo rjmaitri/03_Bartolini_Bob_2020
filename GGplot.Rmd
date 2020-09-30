@@ -110,35 +110,70 @@ quantile(vole_vaso, probs = 0.75)
 ##    2a. Use sample() to get just one resample with a sample size of 10. What is its upper quartile?
 
 ```{r}
+#Create a sample vector
+vole_samp <- sample(vole_vaso, 10)
+#find the upper quartile
+quantile(vole_samp, probs=0.75)
 
+```
+
+<span style="color: green;"> The resampled vector "vole_samp" has 10 randomly chosen values from "vole_vaso" which have a 3rd quartile value of *86.5*</span>
+
+##    2b. Build an initial data frame for simulations with the sample sizes 5 through 20.
+
+```{r}
+
+#df for sample sizes 5:20
+samp_sim <- data.frame(samp_size = 5:20)
 
 ```
 
 
+##    2c. Use this data frame to get simulated upper quartiles at each sample size 1,000 times (i.e., for 1,000 simulations).
 
-##    2b. Build an initial data frame for simulations with the sample sizes 5 through 20.
+```{r}
+library(dplyr)
+library(reactable)
 
-##    3c. Use this data frame to get simulated upper quartiles for each sample size. using 1,000 simulations
-
-##    3d. With a ggplot, make a guesstimate as to the best sample size for estimating the upper quartile of the population. Use whatever geom you feel makes things most easy to see. E.C. Add a red dashed line using geom_vline() or geom_hline() to show where that should be, perhaps.
-
-##   3e. Plot the SE of the estimate of the upper quantile by sample size. Again, what it the best way to see this? Does it level off? Is there a level you feel acceptable? Justify your answer. Does this match with what you put in 3d?
-
-#### 4. Ggplot
-
-## A little while back, Dave Curran using some of the code I’d posted from a previous 607 lab made a wonderful animation of change in arctic sea ice.
+#samples
 
 
+VV_uqr_sims <- samp_sim %>%
+  rowwise(samp_size) %>%
+  summarize(samp_iqr = 
+         replicate(62, 
+              rnorm(samp_size, mean(vole_vaso), sd(vole_vaso)) %>% quantile(,probs=0.75)))
 
-##He used data from
+
+reactable(VV_uqr_sims)
+
+```
+
+##  2d. With a ggplot, make a guesstimate as to the best sample size for estimating the upper quartile of the population. Use whatever geom you feel makes things most easy to see. E.C. Add a red dashed line using geom_vline() or geom_hline() to show where that should be, perhaps.
+
+```{r}
+#plot UQR vs sample size
+
+ggplot()
+
+```
+
+
+##  2e. Plot the SE of the estimate of the upper quantile by sample size. Again, what it the best way to see this? Does it level off? Is there a level you feel acceptable? Justify your answer. Does this match with what you put in 3d?
+
+3. Ggplot
+A little while back, Dave Curran using some of the code I’d posted from a previous 607 lab made a wonderful animation of change in arctic sea ice.
+
+
+
+He used data from
 
 ftp://sidads.colorado.edu/DATASETS/NOAA/G02135/north/daily/data/NH_seaice_extent_final_v2.csv ftp://sidads.colorado.edu/DATASETS/NOAA/G02135/north/daily/data/NH_seaice_extent_nrt_v2.csv
 
-## I’m providing you with a cleaned form of his data (his code is here) for you to work with in a few plots. The data file is called NH_seaice_extent_monthly_1978_2016.csv
+I’m providing you with a cleaned form of his data (his code is here) for you to work with in a few plots. The data file is called NH_seaice_extent_monthly_1978_2016.csv
 
-##    4a. Some setup. Run the code below. For extra credit, look up the packages and functions used and explain what is going on here. But, that’s EC.
+    3a. Some setup. Run the code below. For extra credit, look up the packages and functions used and explain what is going on here. But, that’s EC.
 
-```{r}
 #libraries
 library(dplyr)
 library(readr)
@@ -150,21 +185,18 @@ theme_set(theme_bw(base_size=12))
 ice <- read_csv("http://biol607.github.io/homework/data/NH_seaice_extent_monthly_1978_2016.csv") %>%
   mutate(Month_Name = factor(Month_Name),
          Month_Name = fct_reorder(Month_Name, Month))
+    3b. Make a boxplot showing the variability in sea ice extent every month.
 
-```
+    3c. Use dplyr to get the annual minimum sea ice extent. Plot minimum ice by year. What do you observe?
 
-##   4b. Make a boxplot showing the variability in sea ice extent every month.
+    3d. One thing that’s really cool about faceting is that you can use cut_*() functions on continuos variables to make facets by groups of continuous variables. To see what I mean, try cut_interval(1:10, n = 5) See how it makes five bins of even width? We use cut_interval() or other cut functions with faceting like so facet_wrap(~cut_interval(some_variable)).
 
-##  *4c. Use dplyr to get the annual minimum sea ice extent. Plot minimum ice by year. What do you observe?
+With the original data, plot sea ice by year, with different lines (oh! What geom will you need for that?) for different months. Then, use facet_wrap and cut_interval(Month, n=4) to split the plot into seasons.
 
-##   4d. One thing that’s really cool about faceting is that you can use cut_*() functions on continuos variables to make facets by groups of continuous variables. To see what I mean, try cut_interval(1:10, n = 5) See how it makes five bins of even width? We use cut_interval() or other cut functions with faceting like so facet_wrap(~cut_interval(some_variable)).
+    3e. Last, make a line plot of sea ice by month with different lines as different years. Gussy it up with colors by year, a different theme, critical values, and whatever other annotations, changes to axes, etc., you think best show the story of this data. For ideas, see the lab, and look at various palettes around. Extra credit for using colorfindr to make a palette.
 
-## With the original data, plot sea ice by year, with different lines (oh! What geom will you need for that?) for different months. Then, use facet_wrap and cut_interval(Month, n=4) to split the plot into seasons.
+    3f. Extra Credit. Make it animated with gganimate. Just like above.
 
-##  4e. Last, make a line plot of sea ice by month with different lines as different years. Gussy it up with colors by year, a different theme, critical values, and whatever other annotations, changes to axes, etc., you think best show the story of this data. For ideas, see the lab, and look at various palettes around. Extra credit for using colorfindr to make a palette.
+    3g. Extra Credit. Use the data and make something wholly new and awesome. Even extra extra credit for something amazing animated.
 
-##  4f. Extra Credit. Make it animated with gganimate. Just like above.
-
-##  4g. Extra Credit. Use the data and make something wholly new and awesome. Even extra extra credit for something amazing animated.
-
-##  5. Extra Credit x 3 Participate in this week or last week’s tidy tuesday (and see that link to learn waht it is). See here for data and schedule. Not only include what you do and your code here, but also include a link to where you tweet our your entry with a link to the code and the #tidytuesday hashtag.
+    4. Extra Credit x 3 Participate in this week or last week’s tidy tuesday (and see that link to learn waht it is). See here for data and schedule. Not only include what you do and your code here, but also include a link to where you tweet our your entry with a link to the code and the #tidytuesday hashtag.
