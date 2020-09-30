@@ -134,6 +134,7 @@ samp_sim <- data.frame(samp_size = 5:20)
 ```{r}
 library(dplyr)
 library(reactable)
+library(ggplot2)
 
 #samples
 
@@ -153,13 +154,21 @@ reactable(VV_uqr_sims)
 
 ```{r}
 #plot UQR vs sample size
+#Build a base GGplot
+UQR_base <- ggplot(VV_uqr_sims, aes(x = samp_iqr))
 
-ggplot()
+UQR_base +
+  geom_histogram()
 
 ```
 
 
 ##  2e. Plot the SE of the estimate of the upper quantile by sample size. Again, what it the best way to see this? Does it level off? Is there a level you feel acceptable? Justify your answer. Does this match with what you put in 3d?
+
+```{r}
+
+```
+
 
 3. Ggplot
 A little while back, Dave Curran using some of the code I’d posted from a previous 607 lab made a wonderful animation of change in arctic sea ice.
