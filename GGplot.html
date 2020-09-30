@@ -423,18 +423,17 @@ SD_vole_vaso &lt;- sqrt(sum((vole_vaso-mean(vole_vaso))^2/(length(vole_vaso)-1))
 SQRT_vole_vasoAVG &lt;- sqrt(length(vole_vaso))</code></pre>
 <p><span style="color: green;">√N = <em>7.6</em></sup></p>
 <p><span style="color: green;"> The std error of the mean of the vole vassopressin population is <em>6.6528486</em></span></p>
-<pre><code>
-&lt;span style=&quot;color: green;&quot;&gt; The standard deviation is the square root of the average value of (xi - mu)&lt;sup&gt;2&lt;/sup&gt;
-
-##  1d. What does the standard error of the mean tell you about our estimate of the mean values of the population of vole vassopressin?
-
-#### 2. Sample Size for upper quartiles.
-
-## We can get the upper quartile value of vole vassopressin with
-
-
-```r
-quantile(vole_vaso, probs = 0.75)</code></pre>
+<p><span style="color: green;"> The standard deviation is the square root of the average value of (xi - mu)<sup>2</sup></p>
+</div>
+<div id="d.-what-does-the-standard-error-of-the-mean-tell-you-about-our-estimate-of-the-mean-values-of-the-population-of-vole-vassopressin" class="section level2">
+<h2>1d. What does the standard error of the mean tell you about our estimate of the mean values of the population of vole vassopressin?</h2>
+<div id="sample-size-for-upper-quartiles." class="section level4">
+<h4>2. Sample Size for upper quartiles.</h4>
+</div>
+</div>
+<div id="we-can-get-the-upper-quartile-value-of-vole-vassopressin-with" class="section level2">
+<h2>We can get the upper quartile value of vole vassopressin with</h2>
+<pre class="r"><code>quantile(vole_vaso, probs = 0.75)</code></pre>
 <pre><code>## 75% 
 ##  83</code></pre>
 <div id="lets-assume-the-sample-is-representative-of-the-popultion." class="section level4">

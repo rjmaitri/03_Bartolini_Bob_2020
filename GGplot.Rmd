@@ -87,15 +87,14 @@ SQRT_vole_vasoAVG <- sqrt(length(vole_vaso))
 
 ```
 
-<span style="color: green;">&#8730;N = *7.6*</sup>
+<span style="color: green;">&#8730;N = *7.6*, The standard error is calculated by dividing the s.d. *29* by *7.6*</sup>
 
 <span style="color: green;"> The std error of the mean of the vole vassopressin population is *`r SD_vole_vaso/SQRT_vole_vasoAVG`*</span>
 
-```
-
-<span style="color: green;"> The standard deviation is the square root of the average value of (xi - mu)<sup>2</sup>
 
 ##  1d. What does the standard error of the mean tell you about our estimate of the mean values of the population of vole vassopressin?
+
+<span style="color: green;"> The std error of the mean of the vole vassopressin measures the precision of the estimated mean. This standard error is relatively small compared to the estimated mean, this means we have little uncertainty in the estimated mean of our sample population.</span>
 
 #### 2. Sample Size for upper quartiles.
 
@@ -109,6 +108,13 @@ quantile(vole_vaso, probs = 0.75)
 #### Let’s assume the sample is representative of the popultion.
 
 ##    2a. Use sample() to get just one resample with a sample size of 10. What is its upper quartile?
+
+```{r}
+
+
+```
+
+
 
 ##    2b. Build an initial data frame for simulations with the sample sizes 5 through 20.
 
