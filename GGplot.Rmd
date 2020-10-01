@@ -183,45 +183,65 @@ UQR_Base +
 
 ```{r}
 
+
+VVsim_se <- VV_uqr_sims %>%
+  # Group it by sample size
+  group_by(samp_size) %>%
+  summarize(UQR_SE = sd(UQR)/sqrt(samp_size))
+
+ggplot(data = VVsim_se)+
+  geom_point(mapping = aes(x = samp_size, y = UQR_SE))
 ```
 
 
-3. Ggplot
-A little while back, Dave Curran using some of the code I’d posted from a previous 607 lab made a wonderful animation of change in arctic sea ice.
+#### 3. Ggplot
+## A little while back, Dave Curran using some of the code I’d posted from a previous 607 lab made a wonderful animation of change in arctic sea ice.
 
 
 
-He used data from
+## He used data from
 
 ftp://sidads.colorado.edu/DATASETS/NOAA/G02135/north/daily/data/NH_seaice_extent_final_v2.csv ftp://sidads.colorado.edu/DATASETS/NOAA/G02135/north/daily/data/NH_seaice_extent_nrt_v2.csv
 
-I’m providing you with a cleaned form of his data (his code is here) for you to work with in a few plots. The data file is called NH_seaice_extent_monthly_1978_2016.csv
+##I’m providing you with a cleaned form of his data (his code is here) for you to work with in a few plots. The data file is called NH_seaice_extent_monthly_1978_2016.csv
 
-    3a. Some setup. Run the code below. For extra credit, look up the packages and functions used and explain what is going on here. But, that’s EC.
+##  3a. Some setup. Run the code below. For extra credit, look up the packages and functions used and explain what is going on here. But, that’s EC.
 
-#libraries
+
+```{r}
 library(dplyr)
 library(readr)
 library(ggplot2)
 library(forcats)
+```
 
+
+```{r}
 theme_set(theme_bw(base_size=12))
 
 ice <- read_csv("http://biol607.github.io/homework/data/NH_seaice_extent_monthly_1978_2016.csv") %>%
   mutate(Month_Name = factor(Month_Name),
          Month_Name = fct_reorder(Month_Name, Month))
-    3b. Make a boxplot showing the variability in sea ice extent every month.
+```
 
-    3c. Use dplyr to get the annual minimum sea ice extent. Plot minimum ice by year. What do you observe?
 
-    3d. One thing that’s really cool about faceting is that you can use cut_*() functions on continuos variables to make facets by groups of continuous variables. To see what I mean, try cut_interval(1:10, n = 5) See how it makes five bins of even width? We use cut_interval() or other cut functions with faceting like so facet_wrap(~cut_interval(some_variable)).
+##  3b. Make a boxplot showing the variability in sea ice extent every month.
 
-With the original data, plot sea ice by year, with different lines (oh! What geom will you need for that?) for different months. Then, use facet_wrap and cut_interval(Month, n=4) to split the plot into seasons.
+```{r}
 
-    3e. Last, make a line plot of sea ice by month with different lines as different years. Gussy it up with colors by year, a different theme, critical values, and whatever other annotations, changes to axes, etc., you think best show the story of this data. For ideas, see the lab, and look at various palettes around. Extra credit for using colorfindr to make a palette.
 
-    3f. Extra Credit. Make it animated with gganimate. Just like above.
+```
 
-    3g. Extra Credit. Use the data and make something wholly new and awesome. Even extra extra credit for something amazing animated.
+##  3c. Use dplyr to get the annual minimum sea ice extent. Plot minimum ice by year. What do you observe?
 
-    4. Extra Credit x 3 Participate in this week or last week’s tidy tuesday (and see that link to learn waht it is). See here for data and schedule. Not only include what you do and your code here, but also include a link to where you tweet our your entry with a link to the code and the #tidytuesday hashtag.
+##  3d. One thing that’s really cool about faceting is that you can use cut_*() functions on continuos variables to make facets by groups of continuous variables. To see what I mean, try cut_interval(1:10, n = 5) See how it makes five bins of even width? We use cut_interval() or other cut functions with faceting like so facet_wrap(~cut_interval(some_variable)).
+
+##  With the original data, plot sea ice by year, with different lines (oh! What geom will you need for that?) for different months. Then, use facet_wrap and cut_interval(Month, n=4) to split the plot into seasons.
+
+##  3e. Last, make a line plot of sea ice by month with different lines as different years. Gussy it up with colors by year, a different theme, critical values, and whatever other annotations, changes to axes, etc., you think best show the story of this data. For ideas, see the lab, and look at various palettes around. Extra credit for using colorfindr to make a palette.
+
+##  3f. Extra Credit. Make it animated with gganimate. Just like above.
+
+##  3g. Extra Credit. Use the data and make something wholly new and awesome. Even extra extra credit for something amazing animated.
+
+##  4. Extra Credit x 3 Participate in this week or last week’s tidy tuesday (and see that link to learn waht it is). See here for data and schedule. Not only include what you do and your code here, but also include a link to where you tweet our your entry with a link to the code and the #tidytuesday hashtag.
