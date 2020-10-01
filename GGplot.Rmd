@@ -230,15 +230,65 @@ ice <- read_csv("http://biol607.github.io/homework/data/NH_seaice_extent_monthly
 ```{r}
 
 
+ggplot(data = ice)+
+  geom_boxplot(mapping = aes(x = Month_Name, y = Extent))
+
 ```
 
 ##  3c. Use dplyr to get the annual minimum sea ice extent. Plot minimum ice by year. What do you observe?
 
+```{r}
+Annual_min <- ice %>% 
+  group_by(Year) %>%
+  mutate(Extent_min = min(Extent))
+  
+ggplot(data = Annual_min) +
+  geom_line(mapping = aes(x=Year, y= Extent_min))
+
+```
+
+
 ##  3d. One thing that’s really cool about faceting is that you can use cut_*() functions on continuos variables to make facets by groups of continuous variables. To see what I mean, try cut_interval(1:10, n = 5) See how it makes five bins of even width? We use cut_interval() or other cut functions with faceting like so facet_wrap(~cut_interval(some_variable)).
+
+```{r}
+plot(cut_interval(1:10, n = 5))
+
+```
+
 
 ##  With the original data, plot sea ice by year, with different lines (oh! What geom will you need for that?) for different months. Then, use facet_wrap and cut_interval(Month, n=4) to split the plot into seasons.
 
+```{r}
+ice_season <- ice %>%
+  mutate(season = 
+           ifelse(Month %in% c(12, 1, 2), "Winter",
+           ifelse(Month %in% c(3, 4, 5), "Spring",
+           ifelse(Month %in% c(6, 7, 8), "Summer",
+           ifelse(Month %in% c(9, 10, 11), "Fall", "Error")))))
+
+Base_month <- ggplot(data = ice_season) +
+  geom_line(mapping = aes(x = Year, y = Extent, color = Month_Name))
+
+Base_month +
+  facet_wrap(~season)
+                     
+```
+
+
+
+
+
 ##  3e. Last, make a line plot of sea ice by month with different lines as different years. Gussy it up with colors by year, a different theme, critical values, and whatever other annotations, changes to axes, etc., you think best show the story of this data. For ideas, see the lab, and look at various palettes around. Extra credit for using colorfindr to make a palette.
+
+```{r}
+
+Ice_year_base <- ggplot(data = ice,
+                        mapping = aes(x = Month_Name, y = Extent))
+
+Ice_year_base+
+  geom_line(mapping = aes(group=Year, color=Year))
+```
+
 
 ##  3f. Extra Credit. Make it animated with gganimate. Just like above.
 
