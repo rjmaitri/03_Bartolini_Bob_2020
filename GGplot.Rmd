@@ -141,7 +141,7 @@ library(ggplot2)
 
 VV_uqr_sims <- samp_sim %>%
   rowwise(samp_size) %>%
-  summarize(samp_iqr = 
+  summarize(UQR = 
          replicate(62, 
               rnorm(samp_size, mean(vole_vaso), sd(vole_vaso)) %>% quantile(,probs=0.75)))
 
@@ -153,13 +153,29 @@ reactable(VV_uqr_sims)
 ##  2d. With a ggplot, make a guesstimate as to the best sample size for estimating the upper quartile of the population. Use whatever geom you feel makes things most easy to see. E.C. Add a red dashed line using geom_vline() or geom_hline() to show where that should be, perhaps.
 
 ```{r}
-#plot UQR vs sample size
-#Build a base GGplot
-UQR_base <- ggplot(VV_uqr_sims, aes(x = samp_iqr))
 
-UQR_base +
-  geom_histogram()
+# Take our VV UQRsample data
+VVsim_summary <- VV_uqr_sims %>%
+  # Group it by sample size
+  group_by(samp_size) %>%
+  # Take the SD of the sample size
+  summarize(UQR_sd = sd(UQR))
 
+sample_arrange <- VVsim_summary %>%
+  # Sort it by SD
+  arrange(UQR_sd)
+
+sample_arrange
+```
+
+```{r}
+UQR_Base <- ggplot(data = sample_arrange,
+       mapping = aes(x =samp_size,
+                     y =UQR_sd))
+
+UQR_Base +
+  geom_point()+
+  geom_hline(aes(yintercept=min(UQR_sd)))
 ```
 
 
