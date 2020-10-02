@@ -6,7 +6,7 @@ output:
   html_document: 
     theme: cerulean
 ---
-
+#### [**GIT**](https://github.com/rjmaitri/03_Bartolini_Bob_2020)
 <div align="center">
  <marquee behavior="alternate" bgcolor="#bb3434" direction="left" height:="" 
  loop="7" scrollamount="1" scrolldelay="2" width="100%">
@@ -39,7 +39,7 @@ local({
 
 
 ## 1. Sample Properties
-### Consider the following vasopressin levels in voles.
+#### Consider the following vasopressin levels in voles.
 
 ```{r}
 vole_vaso <- c(98,96,94,88,86,82,77,74,70,60,
@@ -56,7 +56,7 @@ vole_vaso <- c(98,96,94,88,86,82,77,74,70,60,
 <span style="color: green;"> The mean of this sample of vole vasopressin is `r mean(vole_vaso)`<br>
 The median is `r median(vole_vaso)`<br>
 The SD is `r sd(vole_vaso)`<br>
-The IQR is IQR `r IQR(vole_vaso)`</span>
+The IQR is `r IQR(vole_vaso)`</span>
 
 ####  1c. What is the standard error of the mean (do this with a formula!)?
 <span style="color: green;">The formula for standard error is &sigma;/&#8730;N<br>
@@ -266,6 +266,7 @@ ggplot(data = Annual_min) +
   geom_line(mapping = aes(x=Year, y= Extent_min))
 
 ```
+
 <span style="color: green;">This graph has an interesting peak/drop off prior to 1980</span>
 
 ####  3d. One thing that’s really cool about faceting is that you can use cut_*() functions on continuos variables to make facets by groups of continuous variables. To see what I mean, try cut_interval(1:10, n = 5) See how it makes five bins of even width? We use cut_interval() or other cut functions with faceting like so facet_wrap(~cut_interval(some_variable)).
