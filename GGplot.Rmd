@@ -54,20 +54,20 @@ vole_vaso <- c(98,96,94,88,86,82,77,74,70,60,
 
 ####  1a. Say “Vole vasopressin” 10 times as fast as you can. How many times did you trip up?
 
-<span style="color: green;"> I was tongue twisted on the 4th utterance.</span>
+<span style="color: green;"> Tongue twisted on the 4th utterance.</span>
 
-##  1b. What is the mean, median, sd, and interquartile range of the sample?
+###  1b. What is the mean, median, sd, and interquartile range of the sample?
 
 <span style="color: green;"> The mean of this sample of vole vasopressin is `r mean(vole_vaso)`<br>
 The median is `r median(vole_vaso)`<br>
 The SD is `r sd(vole_vaso)`<br>
 The IQR is IQR `r IQR(vole_vaso)`</span>
 
-##  1c. What is the standard error of the mean (do this with a formula!)?
+###  1c. What is the standard error of the mean (do this with a formula!)?
 <span style="color: green;">The formula for standard error is &sigma;/&#8730;N<br>
 I'll begin this problem by calculating the standard deviation. </span>
 
-<span style="color: green;"> The standard deviation is the square root of the average value of (xi - mu)<sup>2</sup></span>
+<span style="color: green;"> The standard deviation is the square root of the average value of (x<sub>i</sub> - mu)<sup>2</sup></span>
 
 ```{r}
 
@@ -92,22 +92,22 @@ SQRT_vole_vasoAVG <- sqrt(length(vole_vaso))
 <span style="color: green;"> The std error of the mean of the vole vassopressin population is *`r SD_vole_vaso/SQRT_vole_vasoAVG`*</span>
 
 
-##  1d. What does the standard error of the mean tell you about our estimate of the mean values of the population of vole vassopressin?
+###  1d. What does the standard error of the mean tell you about our estimate of the mean values of the population of vole vassopressin?
 
 <span style="color: green;"> The std error of the mean of the vole vassopressin measures the precision of the estimated mean. This standard error is relatively small compared to the estimated mean, this means we have little uncertainty in the estimated mean of our sample population.</span>
 
-#### 2. Sample Size for upper quartiles.
+## 2. Sample Size for upper quartiles.
 
-## We can get the upper quartile value of vole vassopressin with
+### We can get the upper quartile value of vole vassopressin with
 
 ```{r}
 quantile(vole_vaso, probs = 0.75)
 
 ```
 
-#### Let’s assume the sample is representative of the popultion.
+### Let’s assume the sample is representative of the popultion.
 
-##    2a. Use sample() to get just one resample with a sample size of 10. What is its upper quartile?
+###   2a. Use sample() to get just one resample with a sample size of 10. What is its upper quartile?
 
 ```{r}
 #Create a sample vector
@@ -117,9 +117,9 @@ quantile(vole_samp, probs=0.75)
 
 ```
 
-<span style="color: green;"> The resampled vector "vole_samp" has 10 randomly chosen values from "vole_vaso" which have a 3rd quartile value of *86.5*</span>
+<span style="color: green;"> The resampled vector "vole_samp" has 10 randomly chosen values from "vole_vaso" which have a 3rd quartile value of `r quantile(vole_samp, probs=0.75)` *</span>
 
-##    2b. Build an initial data frame for simulations with the sample sizes 5 through 20.
+###   2b. Build an initial data frame for simulations with the sample sizes 5 through 20.
 
 ```{r}
 
@@ -129,12 +129,13 @@ samp_sim <- data.frame(samp_size = 5:20)
 ```
 
 
-##    2c. Use this data frame to get simulated upper quartiles at each sample size 1,000 times (i.e., for 1,000 simulations).
+###   2c. Use this data frame to get simulated upper quartiles at each sample size 1,000 times (i.e., for 1,000 simulations).
 
 ```{r}
 library(dplyr)
 library(reactable)
 library(ggplot2)
+library(ggthemes)
 
 #samples
 
@@ -150,7 +151,7 @@ reactable(VV_uqr_sims)
 
 ```
 
-##  2d. With a ggplot, make a guesstimate as to the best sample size for estimating the upper quartile of the population. Use whatever geom you feel makes things most easy to see. E.C. Add a red dashed line using geom_vline() or geom_hline() to show where that should be, perhaps.
+### 2d. With a ggplot, make a guesstimate as to the best sample size for estimating the upper quartile of the population. Use whatever geom you feel makes things most easy to see. E.C. Add a red dashed line using geom_vline() or geom_hline() to show where that should be, perhaps.
 
 ```{r}
 
@@ -165,28 +166,43 @@ sample_arrange <- VVsim_summary %>%
   # Sort it by SD
   arrange(UQR_sd)
 
-sample_arrange
+reactable(sample_arrange)
 ```
 
+<span style="color: green;">I will use the sample size with the smallest sd to estimate the best upper quartile range.</span>
+
 ```{r}
+
+#make a base plot
 UQR_Base <- ggplot(data = sample_arrange,
        mapping = aes(x =samp_size,
                      y =UQR_sd))
 
 UQR_Base +
+#add points
   geom_point()+
-  geom_hline(aes(yintercept=min(UQR_sd)))
+#add a line showing lowest sd
+  geom_hline(aes(yintercept=min(UQR_sd)))+
+#label
+  geom_label(
+    label=round(min(sample_arrange$UQR_sd),digits=1), 
+    x=14,
+    y=min(sample_arrange$UQR_sd),
+    label.size = 0.35,
+    color = "black")+
+  theme_base()
 ```
 
 
-##  2e. Plot the SE of the estimate of the upper quantile by sample size. Again, what it the best way to see this? Does it level off? Is there a level you feel acceptable? Justify your answer. Does this match with what you put in 3d?
+###  2e. Plot the SE of the estimate of the upper quantile by sample size. Again, what it the best way to see this? Does it level off? Is there a level you feel acceptable? Justify your answer. Does this match with what you put in 3d?
 
 ```{r}
 
-
+#Create object for SE of the uqr sims
 VVsim_se <- VV_uqr_sims %>%
   # Group it by sample size
   group_by(samp_size) %>%
+#create SE column
   summarize(UQR_SE = sd(UQR)/sqrt(samp_size))
 
 ggplot(data = VVsim_se)+
@@ -194,24 +210,28 @@ ggplot(data = VVsim_se)+
 ```
 
 
-#### 3. Ggplot
-## A little while back, Dave Curran using some of the code I’d posted from a previous 607 lab made a wonderful animation of change in arctic sea ice.
+## 3. Ggplot
+### A little while back, Dave Curran using some of the code I’d posted from a previous 607 lab made a wonderful animation of change in arctic sea ice.
 
 
 
-## He used data from
+### He used data from
 
 ftp://sidads.colorado.edu/DATASETS/NOAA/G02135/north/daily/data/NH_seaice_extent_final_v2.csv ftp://sidads.colorado.edu/DATASETS/NOAA/G02135/north/daily/data/NH_seaice_extent_nrt_v2.csv
 
-##I’m providing you with a cleaned form of his data (his code is here) for you to work with in a few plots. The data file is called NH_seaice_extent_monthly_1978_2016.csv
+###I’m providing you with a cleaned form of his data (his code is here) for you to work with in a few plots. The data file is called NH_seaice_extent_monthly_1978_2016.csv
 
-##  3a. Some setup. Run the code below. For extra credit, look up the packages and functions used and explain what is going on here. But, that’s EC.
+### 3a. Some setup. Run the code below. For extra credit, look up the packages and functions used and explain what is going on here. But, that’s EC.
 
 
 ```{r}
+#dplyr package has a "grammar of verbs" that are useful for data manipulation
 library(dplyr)
+#readr(parses) over csv, tsv and fwf files
 library(readr)
+#"The grammar of graphics" is a system to "declaratively" create graphics. input data, map variables to aesthetics
 library(ggplot2)
+#reorders factor levels(moves specified levels to front, ordering by first appearance, reversing and randomly shuffling) *source:rdocumentation.org
 library(forcats)
 ```
 
@@ -222,6 +242,8 @@ theme_set(theme_bw(base_size=12))
 ice <- read_csv("http://biol607.github.io/homework/data/NH_seaice_extent_monthly_1978_2016.csv") %>%
   mutate(Month_Name = factor(Month_Name),
          Month_Name = fct_reorder(Month_Name, Month))
+
+reactable(ice)
 ```
 
 
@@ -229,19 +251,25 @@ ice <- read_csv("http://biol607.github.io/homework/data/NH_seaice_extent_monthly
 
 ```{r}
 
-
+#creata ggplot using ice, Extent by month
 ggplot(data = ice)+
   geom_boxplot(mapping = aes(x = Month_Name, y = Extent))
 
 ```
 
+<span style="color: green;">This graph is useful for showing the variability of ice extent over the calendar year. We can see that ice extent peaks in March, has a minimum peak in September. The boxplot is useful for showing variation and we can see the Fall has the greatest variation in ice extent by the magniute of their interquartile range and upper and lower values (whiskers). The only month with an extreme value is June, which appears to be a weather anomaly and may be worth investigating.</span>
+
 ##  3c. Use dplyr to get the annual minimum sea ice extent. Plot minimum ice by year. What do you observe?
 
 ```{r}
+#annual min object
 Annual_min <- ice %>% 
+#group
   group_by(Year) %>%
+#mutate
   mutate(Extent_min = min(Extent))
-  
+
+#plot using a line
 ggplot(data = Annual_min) +
   geom_line(mapping = aes(x=Year, y= Extent_min))
 
@@ -251,6 +279,7 @@ ggplot(data = Annual_min) +
 ##  3d. One thing that’s really cool about faceting is that you can use cut_*() functions on continuos variables to make facets by groups of continuous variables. To see what I mean, try cut_interval(1:10, n = 5) See how it makes five bins of even width? We use cut_interval() or other cut functions with faceting like so facet_wrap(~cut_interval(some_variable)).
 
 ```{r}
+
 plot(cut_interval(1:10, n = 5))
 
 ```
@@ -258,40 +287,33 @@ plot(cut_interval(1:10, n = 5))
 
 ##  With the original data, plot sea ice by year, with different lines (oh! What geom will you need for that?) for different months. Then, use facet_wrap and cut_interval(Month, n=4) to split the plot into seasons.
 
-```{r}
-ice_season <- ice %>%
-  mutate(season = 
-           ifelse(Month %in% c(12, 1, 2), "Winter",
-           ifelse(Month %in% c(3, 4, 5), "Spring",
-           ifelse(Month %in% c(6, 7, 8), "Summer",
-           ifelse(Month %in% c(9, 10, 11), "Fall", "Error")))))
 
-Base_month <- ggplot(data = ice_season) +
+```{r}
+Base_month <- ggplot(data = ice) +
   geom_line(mapping = aes(x = Year, y = Extent, color = Month_Name))
 
 Base_month +
-  facet_wrap(~season)
-                     
+  facet_wrap(~cut_interval(Month, n=4))
 ```
 
-
-
-
+<span style="color: green;">Useful graphic for showing the range of decadal ice extent according to season. The effects of global warming are apparent in the downward trend. </span>
 
 ##  3e. Last, make a line plot of sea ice by month with different lines as different years. Gussy it up with colors by year, a different theme, critical values, and whatever other annotations, changes to axes, etc., you think best show the story of this data. For ideas, see the lab, and look at various palettes around. Extra credit for using colorfindr to make a palette.
 
 ```{r}
+library(viridisLite)
 
+#make a base plot
 Ice_year_base <- ggplot(data = ice,
                         mapping = aes(x = Month_Name, y = Extent))
 
-Ice_year_base+
-  geom_line(mapping = aes(group=Year, color=Year))
+#add lines, grouping by year
+Gussy_Ice <- Ice_year_base+
+  geom_line(mapping = aes(group=Year, color=Year))+
+  scale_color_viridis_c()+
+  theme_clean()
+
+Gussy_Ice
 ```
 
-
-##  3f. Extra Credit. Make it animated with gganimate. Just like above.
-
-##  3g. Extra Credit. Use the data and make something wholly new and awesome. Even extra extra credit for something amazing animated.
-
-##  4. Extra Credit x 3 Participate in this week or last week’s tidy tuesday (and see that link to learn waht it is). See here for data and schedule. Not only include what you do and your code here, but also include a link to where you tweet our your entry with a link to the code and the #tidytuesday hashtag.
+<span style="color: green;">This graph shows a significant decrease of ice extent over a 40 year period. The Fall has the most dramatic decrease, which is probably a difficult time for wildlife that rely on ice. </span>
